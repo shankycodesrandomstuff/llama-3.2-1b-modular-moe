@@ -1,4 +1,4 @@
-"""Minimal local sparse-MoE components for Hugging Face Llama."""
+"""Local sparse-MoE pieces for Hugging Face Llama."""
 
 from .convert import LlamaMoEForCausalLM, convert_single_layer_to_moe
 from .moe import LlamaExpert, SparseMoEFeedForward, TopKRouter, load_balancing_loss

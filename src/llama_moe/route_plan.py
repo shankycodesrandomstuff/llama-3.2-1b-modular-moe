@@ -1,4 +1,4 @@
-"""Backend-neutral routing data produced by a local top-k router."""
+"""Route data. Execution backend stays elsewhere."""
 
 from dataclasses import dataclass
 
@@ -7,7 +7,7 @@ import torch
 
 @dataclass(frozen=True)
 class RoutePlan:
-    """Selected routes for flattened `[batch * sequence, hidden]` tokens."""
+    """Routes for flattened `[batch * sequence, hidden]` tokens."""
 
     expert_indices: torch.Tensor
     routing_weights: torch.Tensor
@@ -15,7 +15,6 @@ class RoutePlan:
     batch_shape: tuple[int, int]
 
     def validate(self, num_experts: int) -> None:
-        """Raise `ValueError` when plan tensors cannot safely be dispatched."""
         if self.expert_indices.ndim != 2 or self.routing_weights.shape != self.expert_indices.shape:
             raise ValueError(
                 "expert_indices and routing_weights must have equal [tokens, top_k] shape"

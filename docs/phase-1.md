@@ -3,9 +3,9 @@
 ## Invariants
 
 - Convert exactly one `model.layers[index].mlp` at first.
-- Each expert is a cloned Hugging Face `LlamaMLP`; no Llama attention/cache/norm/residual code is changed.
+- Each expert is a cloned Hugging Face `LlamaMLP`. Do not touch attention, cache, norms, or residuals here.
 - The router uses an FP32 linear score calculation, softmax, top-k selection, and selected-score normalization.
-- Dispatch invokes only experts selected for tokens. It is local PyTorch dispatch, not expert parallelism.
+- Dispatch invokes selected experts only. This is local PyTorch, not expert parallelism.
 
 ## Required evidence before training
 
@@ -16,7 +16,7 @@
 
 ## Experiment record
 
-Use immutable directories such as `experiments/EXP-001/` and include ID, hypothesis, configuration, variables, method, expected result, measured result, and conclusion. Do not overwrite prior results.
+Use immutable directories such as `experiments/EXP-001/`. Record ID, hypothesis, configuration, variables, method, expected result, measured result, and conclusion. Do not overwrite results because the next run is inconvenient.
 
 ## Security release gate
 

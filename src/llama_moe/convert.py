@@ -1,4 +1,4 @@
-"""Explicit dense-Llama to single-layer local-MoE conversion helpers."""
+"""Single-layer dense Llama to local-MoE conversion."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ def _apply_moe_layers(model: LlamaForCausalLM, settings: dict[str, Any], clone_d
 
 
 class LlamaMoEForCausalLM(LlamaForCausalLM):
-    """Llama CausalLM that creates MoE FFN modules from `config.moe_config`."""
+    """Build expert modules from `config.moe_config` before loading weights."""
 
     def __init__(self, config):
         super().__init__(config)
@@ -39,7 +39,7 @@ def convert_single_layer_to_moe(
     num_experts: int = 2,
     top_k: int = 1,
 ) -> LlamaMoEForCausalLM:
-    """Replace one dense FFN in-place and declare its reconstruction config."""
+    """Replace one dense FFN and record enough config to reload it."""
     if not 0 <= layer_index < len(model.model.layers):
         raise IndexError("layer_index is outside the decoder layer range")
     if num_experts != 2:
@@ -55,4 +55,4 @@ def convert_single_layer_to_moe(
     model.config.moe_config = settings
     model.config.architectures = ["LlamaMoEForCausalLM"]
     _apply_moe_layers(model, settings, clone_dense=True)
-    return model  # runtime class remains compatible with LlamaForCausalLM methods
+    return model  # Custom class is only needed when reloading the checkpoint.

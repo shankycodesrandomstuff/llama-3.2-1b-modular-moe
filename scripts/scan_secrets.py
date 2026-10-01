@@ -1,4 +1,4 @@
-"""Fail on obvious credential literals in repository-tracked text files."""
+"""Reject obvious credentials in tracked text files."""
 
 from __future__ import annotations
 

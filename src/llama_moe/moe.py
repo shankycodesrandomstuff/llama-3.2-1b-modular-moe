@@ -1,4 +1,4 @@
-"""Local Mixtral-style routing and sparse dispatch without distributed execution."""
+"""Local Mixtral-style routing. No distributed dispatch."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from .route_plan import RoutePlan
 
 
 class LlamaExpert(nn.Module):
-    """A named wrapper around an existing Llama-compatible SwiGLU MLP."""
+    """Keep the original Llama MLP intact behind an expert boundary."""
 
     def __init__(self, mlp: nn.Module) -> None:
         super().__init__()
@@ -23,7 +23,7 @@ class LlamaExpert(nn.Module):
 
 
 class TopKRouter(nn.Module):
-    """Bias-free FP32 linear top-k router with normalized selected probabilities."""
+    """Bias-free FP32 top-k router. Selected scores are renormalized."""
 
     def __init__(self, hidden_size: int, num_experts: int, top_k: int = 1) -> None:
         super().__init__()
@@ -47,7 +47,7 @@ class TopKRouter(nn.Module):
 
 
 class SparseMoEFeedForward(nn.Module):
-    """Local sparse mixture over cloned Llama FFN experts."""
+    """Local sparse mixture over cloned Llama FFNs. No EP hidden in here."""
 
     def __init__(
         self, dense_mlp: nn.Module, hidden_size: int, num_experts: int = 2, top_k: int = 1
@@ -89,10 +89,9 @@ def load_balancing_loss(
     top_k: int,
     attention_mask: torch.Tensor | None = None,
 ) -> torch.Tensor:
-    """Switch-style router auxiliary loss compatible with local top-k routing.
+    """HF Mixtral-style auxiliary loss for one local router layer.
 
-    This follows the public Hugging Face Mixtral loss semantics while keeping a
-    one-layer tensor API. `attention_mask`, if present, must be `[batch, seq]`.
+    `attention_mask` must be `[batch, seq]`. Padding must not balance experts.
     """
     if router_logits.ndim != 3:
         raise ValueError("router_logits must be [batch, sequence, num_experts]")

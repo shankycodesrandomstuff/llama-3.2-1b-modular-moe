@@ -1,4 +1,4 @@
-"""Record dependency/runtime facts without downloading or storing model weights."""
+"""Record runtime facts. Do not download weights here."""
 
 from __future__ import annotations
 
