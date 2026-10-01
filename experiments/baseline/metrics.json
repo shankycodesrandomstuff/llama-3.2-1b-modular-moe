@@ -1,0 +1,8 @@
+{
+  "status": "partial",
+  "python": "3.12.13",
+  "torch": "2.14.1+cpu",
+  "transformers": "4.57.6",
+  "cuda_available": false,
+  "reason": "No exact official checkpoint is available; model inference and memory metrics are pending."
+}

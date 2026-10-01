@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llama-moe"
+version = "0.1.0"
+description = "Minimal, local sparse-MoE FFN conversion utilities for Hugging Face Llama models."
+requires-python = ">=3.10,<3.15"
+dependencies = [
+  "torch>=2.4,<2.15",
+  "transformers>=4.51,<5",
+  "accelerate>=1.2",
+  "safetensors>=0.4",
+  "huggingface_hub>=0.34,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "ruff>=0.9"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llama_moe"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

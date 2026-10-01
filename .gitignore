@@ -1,0 +1,29 @@
+# Python and test output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# Local experiment outputs and downloaded model artifacts
+experiments/*/artifacts/
+experiments/*/checkpoints/
+outputs/*
+!outputs/research/
+!outputs/research/*.md
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+token.json
